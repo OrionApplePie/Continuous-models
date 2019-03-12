@@ -1,0 +1,5 @@
+{
+    "python.pythonPath": "/home/alex/.venvs/cont-models/bin/python",
+    "python.linting.pylintEnabled": true,
+    "python.linting.enabled": true
+}
