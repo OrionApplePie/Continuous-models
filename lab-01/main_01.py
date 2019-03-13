@@ -1,6 +1,7 @@
 from math import sqrt, sin, cos, pi
-
+import matplotlib.pyplot as plt
 import numpy as np
+from scipy.integrate import odeint
 
 
 def main():
@@ -9,49 +10,33 @@ def main():
     k1 = 0 # пренебречь
     k2 = 0.5*DRAG_COEFFICIENT*0.4*1.29
 
-    v0 = 12
     m = 5
     g = 9.8
 
-    a = (k1*v0) / (m*g)
-    b = (k2*v0*v0) / (m*g)
+    # a = (k1*v0) / (m*g)
+    # b = (k2*v0*v0) / (m*g)
+    a = 0.063
+    b = 0.034
+    alpha = pi /2
 
-    alpha = pi / 2.0
+    def model(x0, t):
+        vx = x0[0]
+        vy = x0[1]
 
-    print(a, b)
+        dv_xdt = -a * sin(alpha) * vx - b * sin(alpha) * sqrt(vx*vx + vy*vy) * vx
+        dv_ydt = -sin(alpha) - a * sin(alpha) * vy - b * sin(alpha) * sqrt(vx*vx + vy*vy) * vy
+        dxdt =  vx / (2 * cos(alpha))
+        dydt =  2*vy / sin(alpha)
 
-    dv_xdt = lambda t, vx, vy: -a * sin(alpha) * vx - b * sin(alpha)*sqrt(vx*vx + vy*vy) * vx
-    dv_ydt = lambda t, vx, vy: -sin(alpha) - a * sin(alpha) * vy - b * sin(alpha) * sqrt(vx*vx + vy*vy) * vy
-    
-    dxdt = lambda t, vx: vx / (2 * cos(alpha))
-    dydt = lambda t, vy: 2*vy / sin(alpha)
-    
-    X0 = Y0 = 0
-    
-    Vx0 = cos(alpha)
-    Vy0 = sin(alpha)
+        return [dv_xdt, dv_ydt, dxdt, dydt]
 
-    h = 0.1
-    
-
-
-def rk4_step(f, x, y):
-    # for i in range(1, n + 1):
-    k1 = h * f(x, y)
-    k2 = h * f(x + 0.5 * h, y + 0.5 * k1)
-    k3 = h * f(x + 0.5 * h, y + 0.5 * k2)
-    k4 = h * f(x + h, y + k3)
-    
-    vy = y + (k1 + k2 + k2 + k3 + k3 + k4) / 6
-    return vy
-
-
-def f(x, y):
-    return x * sqrt(y)
- 
-vx, vy = rk4(f, 0, 1, 10, 100)
-for x, y in list(zip(vx, vy))[::10]:
-    print("%4.1f %10.5f %+12.4e" % (x, y, y - (4 + x * x)**2 / 16))
+    model0 = [cos(alpha), sin(alpha), 0, 0]
+    t = np.linspace(0, 1, 100)
+    sol = odeint(model, model0, t)
+    X = sol[:,2]
+    Y = sol[:,3]
+    plt.plot(X, Y)
+    plt.show()
 
 if __name__ == "__main__":
     main()
