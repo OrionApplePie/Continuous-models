@@ -40,34 +40,38 @@ def main():
     k1 = 0 # пренебречь
     k2 = 0.5*DRAG_COEFFICIENT*pi*0.25*0.25*1.29
     
-    alpha = 60.            # в градусах
+    alpha = 90.            # в градусах
     alpha = alpha * pi / 180. # в радианах
 
     m = 10
     g = 9.81
 
     v0 = 50.
-    v0x = v0*cos(alpha)
+    v0x = v0*cos(alpha) + 12 # + начальная скорость самолета
     v0y = v0*sin(alpha)
     
+    X0 = 0
+    Y0 = 600 # начальная высота
+
     a = (k1*v0) / (m*g)
     b = (k2*v0*v0) / (m*g)
 #     a = 0.013
 #     b = 0.049
     
     # начальные условия
-    y0 = [0.0, 0.0, v0x, v0y]
-
-    t = np.linspace(0., 3, 100)
-    sol = odeint(model2, y0, t, args=(k1, k2, g, m))
+#     y0 = [X0, Y0, v0x, v0y]
+#     t = np.linspace(0., 3, 100)
+#     sol = odeint(model2, y0, t, args=(k1, k2, g, m))
     
-#     t = np.linspace(0., 1, 100)
-#     sol = odeint(
-#             model,
-#             [0, 0, cos(alpha), sin(alpha)],
-#             t,
-#             args=(a, b, alpha)
-#         )
+    # TODO: добавить нач скорость самолета в безразмерные и нач. высоту
+    y0 = [X0, 1, cos(alpha), sin(alpha)]
+    t = np.linspace(0., 2, 100)
+    sol = odeint(
+            model,
+            y0,
+            t,
+            args=(a, b, alpha)
+        )
 
     X = sol[:,0]
     Y = sol[:,1]
