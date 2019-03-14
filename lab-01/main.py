@@ -4,7 +4,7 @@ import matplotlib.pyplot as plt
 import numpy as np
 from scipy.integrate import odeint
 
-from runge_kutta import rk4
+from integrate.runge_kutta import rk4
 
 
 def model(y, t, a, b, alpha):
