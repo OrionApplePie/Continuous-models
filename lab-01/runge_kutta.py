@@ -1,24 +1,30 @@
-def RK4(f):
-    return lambda t, y, dt: (
-        lambda dy1: (
-            lambda dy2: (
-                lambda dy3: (
-                    lambda dy4: (dy1 + 2*dy2 + 2*dy3 + dy4) / 6
-                    )( dt * f( t + dt, y + dy3) )
-                    )( dt * f( t + dt/2, y + dy2/2 ) )
-                    )( dt * f( t + dt/2, y + dy1/2 ) ) 
-                    )( dt * f( t       , y         ) )
+import numpy as np
 
 
-def theory(t): return (t**2 + 4)**2 /16
- 
-from math import sqrt
-dy = RK4(lambda t, y: t*sqrt(y))
- 
-t, y, dt = 0., 1., .1
+def rk4(f, y0, t, args):
+    """Runge-Kutta method for vector function."""
+    """f arguments: y, t, args"""
+    t = np.array(t)
+    n = t.size
+    # TODO: Есть ли другой способ получить шаг?
+    h = (t[n-1] - t[0]) / float(n)
+    
+    vy = [0] * n # массив для результатов вычисленных на каждом шаге
+    vy[0] = y = np.array(y0) # инициализация начального значения вектор-функции
 
-while t <= 10:
-    if abs(round(t) - t) < 1e-5:
-        print("y(%2.1f)\t= %4.6f \t error: %4.6g" % ( t, y, abs(y - theory(t))))
-    t, y = t + dt, y + dy( t, y, dt )
- 
+    for i, tt in enumerate(t):
+        k1 = h * np.array(
+            f(y, tt, *args)
+        )
+        k2 = h * np.array(
+            f(y + 0.5 * k1, tt + 0.5 * h, *args)
+        )
+        k3 = h * np.array(
+            f(y + 0.5 * k2, tt + 0.5 * h, *args)
+        )
+        k4 = h * np.array(
+            f(y + k3, tt + h, *args)
+        )
+        vy[i] = y = y + (k1 + k2 + k2 + k3 + k3 + k4) / 6
+        
+    return np.array(vy)

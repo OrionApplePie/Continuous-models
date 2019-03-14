@@ -4,6 +4,8 @@ import matplotlib.pyplot as plt
 import numpy as np
 from scipy.integrate import odeint
 
+from runge_kutta import rk4
+
 
 def model(y, t, a, b, alpha):
         """Связанные ОДУ (вектор).
@@ -46,12 +48,12 @@ def main():
     m = 10
     g = 9.81
 
-    v0 = 50.
+    v0 = 5.
     v0x = v0*cos(alpha) + 12 # + начальная скорость самолета
     v0y = v0*sin(alpha)
     
     X0 = 0
-    Y0 = 600 # начальная высота
+    Y0 = 123 # начальная высота
 
     a = (k1*v0) / (m*g)
     b = (k2*v0*v0) / (m*g)
@@ -66,7 +68,7 @@ def main():
     # TODO: добавить нач скорость самолета в безразмерные и нач. высоту
     y0 = [X0, 1, cos(alpha), sin(alpha)]
     t = np.linspace(0., 2, 100)
-    sol = odeint(
+    sol = rk4(
             model,
             y0,
             t,
