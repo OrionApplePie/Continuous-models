@@ -1,5 +1,5 @@
 {
-    "python.pythonPath": "/home/alex/anaconda3/bin/python",
+    "python.pythonPath": "/home/alex/.venvs/cont-models/bin/python",
     "python.linting.pylintEnabled": false,
     "python.linting.enabled": true,
     "python.linting.flake8Enabled": true
