@@ -2,8 +2,12 @@ import numpy as np
 
 
 def rk4(f, y0, t, args):
-    """Runge-Kutta method for vector function."""
-    """f arguments: y, t, args"""
+    """Реализация метода Рунге-Кутта для вектор-функции.
+    Аргументы:
+        f: вектор-функция (правая часть),
+        y0: вектор начальных значений,
+        args: аргументы для f."""
+
     t = np.array(t)
     n = t.size
     # TODO: Есть ли другой способ получить шаг?

@@ -2,6 +2,7 @@ from math import sqrt, sin, cos, pi
 
 import matplotlib.pyplot as plt
 import numpy as np
+import scipy.constants as CONST 
 from scipy.integrate import odeint
 
 from integrate.runge_kutta import rk4
@@ -49,8 +50,8 @@ def main():
     alpha = alpha * pi / 180.0  # в радианах
 
     m = 10
-    g = 9.81
-
+    g = CONST.g
+    
     v0 = 5.0
     v0x = v0*cos(alpha) + 12.0  # + начальная скорость самолета
     v0y = v0*sin(alpha)
@@ -93,15 +94,15 @@ def main():
     X2 = solution_rk4[:, 0]
     Y2 = solution_rk4[:, 1]
 
-    with plt.style.context(('dark_background')):
-        plt.plot(X, Y, 'r-o')
+    with plt.style.context(('ggplot')):
+        plt.plot(X, Y, 'r')
         plt.plot(X2, Y2, 'g')
 
         # обязательно настроить, иначе график будет отображаться криво
         plt.axis('equal')
         plt.grid(
-            color='r',
-            linestyle='-',
+            color='b',
+            linestyle=':',
             linewidth=0.5
         )
 
