@@ -16,6 +16,7 @@ def model(y, t, a, b, alpha):
 
     dxdt = vx / (2 * cos(alpha))
     dydt = 2 * vy / (sin(alpha))
+
     dvxdt = -a * sin(alpha) * vx
     - b * sin(alpha) * sqrt(vx*vx + vy*vy) * vx
     dvydt = -sin(alpha)
@@ -49,11 +50,11 @@ def main():
     alpha = 90.0  # в градусах
     alpha = alpha * pi / 180.0  # в радианах
 
-    m = 10
+    m = 120
     g = CONST.g
-    
-    v0 = 5.0
-    v0x = v0*cos(alpha) + 12.0  # + начальная скорость самолета
+
+    v0 = 10
+    v0x = v0*cos(alpha) + 2.0  # + начальная скорость самолета
     v0y = v0*sin(alpha)
 
     X0 = 0
@@ -65,37 +66,41 @@ def main():
 #     b = 0.049
 
     # начальные условия для обычныз ед. измерения
-#     y0 = [X0, Y0, v0x, v0y]
-#     t = np.linspace(0., 3, 100)
-#     sol = odeint(model2, y0, t, args=(k1, k2, g, m))
+    y0 = [X0, Y0, v0x, v0y]
+    t = np.linspace(0., 3, 100)
+    # sol = odeint(model2, y0, t, args=(k1, k2, g, m))
 
     # TODO: добавить нач. скорость самолета в безразмерные и нач. высоту
-    y0 = [X0, 1, cos(alpha), sin(alpha)]
-    t = np.linspace(0., 2, 100)
+    # y0 = [X0, 1, cos(alpha), sin(alpha)]
+    # t = np.linspace(0., 2, 200)
 
     # решение решателем odeint
-    solution_odeint = odeint(
-            model,
-            y0,
-            t,
-            args=(a, b, alpha)
-        )
+    # solution_odeint = odeint(
+    #         model,
+    #         y0,
+    #         t,
+    #         args=(a, b, alpha)
+    #     )
     # решение моей реализацией метода Рунге-Кутты (4)
     solution_rk4 = rk4(
-            model,
+            model2,
             y0,
             t,
-            args=(a, b, alpha)
+            args=(k1, k2, g, m)
         )
 
-    X = solution_odeint[:, 0]
-    Y = solution_odeint[:, 1]
+    # X = solution_odeint[:, 0]
+    # Y = solution_odeint[:, 1]
 
-    X2 = solution_rk4[:, 0]
-    Y2 = solution_rk4[:, 1]
+    max_ind = np.where(
+        solution_rk4 == np.amax(solution_rk4[:, 1])
+    )
+
+    X2 = solution_rk4[:, 0][:max_ind[0][0]]
+    Y2 = solution_rk4[:, 1][:max_ind[0][0]]
 
     with plt.style.context(('ggplot')):
-        plt.plot(X, Y, 'r')
+        # plt.plot(X, Y, 'r')
         plt.plot(X2, Y2, 'g')
 
         # обязательно настроить, иначе график будет отображаться криво
