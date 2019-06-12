@@ -32,6 +32,5 @@ def rk4(f, y0, t, args):
         k4 = h * np.array(
             f(y + k3, tt + h, *args)
         )
-        vy[i] = y = y + (k1 + k2 + k2 + k3 + k3 + k4) / 6
-
+        vy[i] = y = y + (k1 + k2 + k2 + k3 + k3 + k4) / 6.0
     return np.array(vy)
