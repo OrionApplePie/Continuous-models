@@ -141,6 +141,8 @@ def modeling_SI():
 
         # обязательно настроить, иначе график будет отображаться криво
         plt.axis('equal')
+        plt.xlabel("X, метры")
+        plt.ylabel("Y, метры -- высота")
         plt.grid(
             color='b',
             linestyle=':',
@@ -154,6 +156,8 @@ def modeling_SI():
 
         # обязательно настроить, иначе график будет отображаться криво
         plt.axis('equal')
+        plt.xlabel("X, время, сек")
+        plt.ylabel("Y, м\с -- скорость")
         plt.grid(
             color='b',
             linestyle=':',
